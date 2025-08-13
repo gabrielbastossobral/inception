@@ -1,15 +1,19 @@
 FROM debian:bullseye
 
-RUN apt update && apt install -y php php-fpm php-mysql wget tar && apt clean
+ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /var/www/html
+RUN apt update && \
+    apt install -y php php-fpm php-mysql curl wget unzip && \
+    apt clean
 
-RUN wget https://wordpress.org/latest.tar.gz && \
-    tar -xvzf latest.tar.gz --strip-components=1 && \
-    rm latest.tar.gz
+# Instala WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
 
-COPY conf/wp-config.php /var/www/html/wp-config.php
+COPY tools/setup_wp.sh /setup_wp.sh
+RUN chmod +x /setup_wp.sh
 
 EXPOSE 9000
 
-CMD ["php-fpm7.4", "-F"]
+CMD ["bash", "/setup_wp.sh"]

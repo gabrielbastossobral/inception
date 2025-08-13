@@ -1,9 +1,15 @@
-all:
-	docker compose -f srcs/docker-compose.yml up -d --build
+up:
+	docker-compose up -d --build
+
 down:
-	docker compose -f srcs/docker-compose.yml down--volumes
+	docker-compose down -v
 
-clean: down
-	docker system prune -af --volumes
+restart:
+	docker-compose down -v
+	docker-compose up -d --build
 
-re: clean all
+clean:
+	docker-compose down -v
+	rm -rf requirements/nginx/tools/ssl/*.crt requirements/nginx/tools/ssl/*.key
+	rm -rf requirements/wordpress/tools/*.log
+	rm -rf requirements/mariadb/tools/*.sql

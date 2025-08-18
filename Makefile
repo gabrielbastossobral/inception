@@ -1,15 +1,19 @@
+include ./srcs/.env
+
+DOCKER_COMPOSE := docker-compose -f ./srcs/docker-compose.yml
+
 up:
-	docker-compose up -d --build
+	$(DOCKER_COMPOSE) up -d --build
 
 down:
-	docker-compose down -v
+	$(DOCKER_COMPOSE) down -v
 
 restart:
-	docker-compose down -v
-	docker-compose up -d --build
+	$(DOCKER_COMPOSE) down -v
+	$(DOCKER_COMPOSE) up -d --build
 
 clean:
-	docker-compose down -v
+	$(DOCKER_COMPOSE) down -v
 	rm -rf requirements/nginx/tools/ssl/*.crt requirements/nginx/tools/ssl/*.key
 	rm -rf requirements/wordpress/tools/*.log
 	rm -rf requirements/mariadb/tools/*.sql

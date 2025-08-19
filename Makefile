@@ -1,19 +1,33 @@
-include ./srcs/.env
+COMPOSE=docker-compose -f srcs/docker-compose.yml
 
-DOCKER_COMPOSE := docker-compose -f ./srcs/docker-compose.yml
+all: copyenv build up
 
-up:
-	$(DOCKER_COMPOSE) up -d --build
+up: 
+	${COMPOSE} up -d
+
+build:
+	${COMPOSE} build
 
 down:
-	$(DOCKER_COMPOSE) down -v
+	${COMPOSE} down
 
-restart:
-	$(DOCKER_COMPOSE) down -v
-	$(DOCKER_COMPOSE) up -d --build
+copyenv:
+	cp ${HOME}/idkenv.txt ./srcs/.env
+
+prune:
+	docker system prune
 
 clean:
-	$(DOCKER_COMPOSE) down -v
-	rm -rf requirements/nginx/tools/ssl/*.crt requirements/nginx/tools/ssl/*.key
-	rm -rf requirements/wordpress/tools/*.log
-	rm -rf requirements/mariadb/tools/*.sql
+	${COMPOSE} down -v --rmi all
+
+fclean: clean prune
+
+re: fclean all
+
+ok: # for debugging
+	sudo rm -rf ~/data/db
+	sudo rm -rf ~/data/wp
+	mkdir -p ~/data/db
+	mkdir -p ~/data/wp
+
+.PHONY: all up build down copyenv prune clean fclean re ok

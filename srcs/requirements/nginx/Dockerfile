@@ -1,21 +1,17 @@
+# Use the official Debian image as the base
 FROM debian:bullseye
 
-ARG DOMAIN_NAME
-ENV DOMAIN_NAME=${DOMAIN_NAME}
+# Update the package lists for upgrades for packages that need upgrading, as well as new packages that have just come to the repositories
+RUN apt-get update -y && apt-get upgrade -y
 
-RUN apt update && \
-    apt install -y nginx openssl gettext-base && \
-    apt clean
+# Install Nginx and OpenSSL
+RUN apt-get -y install nginx openssl
 
-COPY tools/generate.cert.sh /generate_cert.sh
-RUN chmod +x /generate_cert.sh && /generate_cert.sh "${DOMAIN_NAME}"
+# Generate a new self-signed SSL certificate and private key with OpenSSL
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server_pkey.pem -out /etc/ssl/certs/server.crt -subj "/C=NL/ST=Noord-Holland/L=Amsterdam/O=42/OU=codam/CN=localhost"
 
-COPY conf/nginx.conf /nginx.conf.template
-RUN envsubst '${DOMAIN_NAME}' < /nginx.conf.template > /etc/nginx/nginx.conf
+# Copy the Nginx configuration file from the local system to the Docker image
+COPY default /etc/nginx/sites-available/default
 
-RUN cp /etc/ssl/certs/${DOMAIN_NAME}.crt /etc/ssl/certs/${DOMAIN_NAME}.crt && \
-    cp /etc/ssl/private/${DOMAIN_NAME}.key /etc/ssl/private/${DOMAIN_NAME}.key
-
-EXPOSE 443
-
-CMD ["nginx", "-g", "daemon off;"]
+# Set the command to start Nginx when the Docker container starts
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]

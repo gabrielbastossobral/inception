@@ -29,10 +29,10 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # Copy the WordPress setup shell script from the local system to the Docker image
-COPY wordpress.sh /wordpress.sh
+COPY setup_wp.sh /setup_wp.sh
 
 # Make the WordPress setup shell script executable
-RUN chmod +x /wordpress.sh
+RUN chmod +x /setup_wp.sh
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
@@ -41,7 +41,7 @@ EXPOSE 9000
 WORKDIR /var/www/html
 
 # Set the entrypoint to the WordPress setup shell script
-ENTRYPOINT ["/bin/bash", "/wordpress.sh"]
+ENTRYPOINT ["/bin/bash", "/setup_wp.sh"]
 
 # Set the command to start PHP-FPM when the Docker container starts
 CMD ["/usr/sbin/php-fpm7.4", "-F"]

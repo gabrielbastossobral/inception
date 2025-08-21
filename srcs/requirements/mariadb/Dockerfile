@@ -20,13 +20,13 @@ RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 EXPOSE 3306
 
 # Copy startup script
-COPY mariadb.sh /mariadb.sh
+COPY init_db.sh /init_db.sh
 
 # Set executable permissions for the startup script
-RUN chmod +x /mariadb.sh
+RUN chmod +x /init_db.sh
 
 # Set the entrypoint for the container
-ENTRYPOINT ["/bin/bash", "/mariadb.sh"]
+ENTRYPOINT ["/bin/bash", "/init_db.sh"]
 
 # Start the MySQL server
 CMD ["/usr/sbin/mysqld"]

@@ -8,7 +8,7 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y mariadb-server
 
 # Copy custom configuration file
-COPY 50-server.cnf /etc/mysql/mariadb.conf.d/server.cnf
+COPY server.cnf /etc/mysql/mariadb.conf.d/server.cnf
 
 # Create directory for MySQL runtime files
 RUN mkdir -p /var/run/mysqld

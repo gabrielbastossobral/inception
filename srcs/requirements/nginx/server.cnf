@@ -26,11 +26,9 @@ server {
 
     # This block is for requests to PHP files
     location ~ \.php$ {
-        # Include the fastcgi-php configuration snippet
-        include snippets/fastcgi-php.conf;
-
-        # Set the SCRIPT_FILENAME parameter to the full path of the requested script
-        fastcgi_param SCRIPT_FILENAME /var/www/html/$fastcgi_script_name;
+        # Inclua as configurações manualmente se o snippet não existir
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         
         # Forward requests to the PHP-FPM service listening on the wordpress host on port 9000
         fastcgi_pass wordpress:9000;

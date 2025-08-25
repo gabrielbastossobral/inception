@@ -8,10 +8,14 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get -y install nginx openssl
 
 # Generate a new self-signed SSL certificate and private key with OpenSSL
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server_pkey.pem -out /etc/ssl/certs/server.crt -subj "/C=NL/ST=Noord-Holland/L=Amsterdam/O=42/OU=codam/CN=localhost"
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server_pkey.pem -out /etc/ssl/certs/server.crt -subj "/C=NL/ST=Noord-Holland/L=Amsterdam/O=42/OU=codam/CN=username.42.fr"
 
 # Copy the Nginx configuration file from the local system to the Docker image
 COPY server.cnf /etc/nginx/sites-available/server.cnf
+
+COPY server.cnf /etc/nginx/sites-available/server.cnf
+
+RUN ln -s /etc/nginx/sites-available/server.cnf /etc/nginx/sites-enabled/server.cnf
 
 # Set the command to start Nginx when the Docker container starts
 CMD ["/usr/sbin/nginx", "-g", "daemon off;"]

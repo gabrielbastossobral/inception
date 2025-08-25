@@ -1,10 +1,15 @@
 # This block defines a server
 server {
+
+
     # Listen on port 443 with SSL enabled, this server block is the default server
     listen 443 ssl default_server;
     
     # The path to the SSL certificate
     ssl_certificate /etc/ssl/certs/server.crt;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
     
     # The path to the SSL certificate private key
     ssl_certificate_key /etc/ssl/private/server_pkey.pem;

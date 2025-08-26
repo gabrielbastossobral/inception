@@ -21,7 +21,7 @@ server {
     index index.php;
 
     # The domain name that should match for this server block
-    server_name username.42.fr;
+    server_name gabastos.42.fr;
 
     # This block is for requests to the root directory and subdirectories
     location / {

@@ -6,7 +6,7 @@ Inception is a 42 School
 Using Docker and Docker Compose, the project requires setting up a mini infrastructure composed of multiple interconnected services.
 
 
-## 📌 Objetivo do projeto
+## 📌 Project Goals
 
 The main goal is to create an environment with several containers that mimic a real-world service architecture, ensuring isolation, persistence, and communication between them.
 
